@@ -2,13 +2,17 @@ package com.ilyamur.topaz.swing;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
 
 public class ModelImplTest {
 
-    private AppProperties mockAppProperties;
+    private static final String INITIAL_A = "10";
+    private static final String INITIAL_B = "20";
+    private static final String INITIAL_LINE = "test";
+
     private Model model;
     private Presenter mockPresenter;
 
@@ -16,7 +20,13 @@ public class ModelImplTest {
 
     @Before
     public void before() {
-        mockAppProperties = mock(AppProperties.class);
+        //
+        AppProperties mockAppProperties = mock(AppProperties.class);
+        //
+        when(mockAppProperties.getProperty(AppProperties.INITIAL_A)).thenReturn(INITIAL_A);
+        when(mockAppProperties.getProperty(AppProperties.INITIAL_B)).thenReturn(INITIAL_B);
+        when(mockAppProperties.getProperty(AppProperties.INITIAL_LINE)).thenReturn(INITIAL_LINE);
+        //
         model = new ModelImpl(mockAppProperties);
         mockPresenter = mock(Presenter.class);
         model.setPresenter(mockPresenter);
@@ -33,15 +43,21 @@ public class ModelImplTest {
     @Test
     public void computeSum_bothCorrect() {
         //
-        model.computeSum("2", "4");
+        model.setA("2");
+        model.setB("4");
+        model.computeSum();
+        String sum = model.getSum();
         //
-        verify(mockPresenter).updateComputeSumSuccess("6");
+        verify(mockPresenter).updateComputeSumSuccess();
+        assertEquals("6", sum);
     }
 
     @Test
     public void computeSum_oneIncorrect() {
         //
-        model.computeSum("2", "b");
+        model.setA("2");
+        model.setB("b");
+        model.computeSum();
         //
         verify(mockPresenter).updateComputeSumFailure();
     }
@@ -49,7 +65,9 @@ public class ModelImplTest {
     @Test
     public void computeSum_bothIncorrect() {
         //
-        model.computeSum("a", "b");
+        model.setA("a");
+        model.setB("b");
+        model.computeSum();
         //
         verify(mockPresenter).updateComputeSumFailure();
     }
@@ -57,15 +75,21 @@ public class ModelImplTest {
     @Test
     public void computeProduct_bothCorrect() {
         //
-        model.computeProduct("2", "4");
+        model.setA("2");
+        model.setB("4");
+        model.computeProduct();
+        String product = model.getProduct();
         //
-        verify(mockPresenter).updateComputeProductSuccess("8");
+        verify(mockPresenter).updateComputeProductSuccess();
+        assertEquals("8", product);
     }
 
     @Test
     public void computeProduct_oneIncorrect() {
         //
-        model.computeProduct("2", "b");
+        model.setA("2");
+        model.setB("b");
+        model.computeProduct();
         //
         verify(mockPresenter).updateComputeProductFailure();
     }
@@ -73,7 +97,9 @@ public class ModelImplTest {
     @Test
     public void computeProduct_bothIncorrect() {
         //
-        model.computeProduct("a", "b");
+        model.setA("a");
+        model.setB("b");
+        model.computeProduct();
         //
         verify(mockPresenter).updateComputeProductFailure();
     }
@@ -81,52 +107,46 @@ public class ModelImplTest {
     @Test
     public void computeLineLength_zeroLength() {
         //
-        model.computeLineLength("");
+        model.setLine("");
+        model.computeLength();
+        String length = model.getLength();
         //
-        verify(mockPresenter).updateComputeLineLength("0");
+        verify(mockPresenter).updateComputeLineLength();
+        assertEquals("0", length);
     }
 
     @Test
     public void computeLineLength_someLength() {
         //
-        model.computeLineLength("test");
+        model.setLine("test");
+        model.computeLength();
+        String length = model.getLength();
         //
-        verify(mockPresenter).updateComputeLineLength("4");
+        verify(mockPresenter).updateComputeLineLength();
+        assertEquals("4", length);
     }
 
     @Test
     public void getInitialA() {
         //
-        String expInitialA = "10";
-        when(mockAppProperties.getProperty(AppProperties.INITIAL_A)).thenReturn(expInitialA);
+        String actInitialA = model.getA();
         //
-        String actInitialA = model.getInitialA();
-        //
-        verify(mockAppProperties).getProperty(AppProperties.INITIAL_A);
-        assertEquals(expInitialA, actInitialA);
+        assertEquals(INITIAL_A, actInitialA);
     }
 
     @Test
     public void getInitialB() {
         //
-        String expInitialB = "10";
-        when(mockAppProperties.getProperty(AppProperties.INITIAL_B)).thenReturn(expInitialB);
+        String actInitialB = model.getB();
         //
-        String actInitialB = model.getInitialB();
-        //
-        verify(mockAppProperties).getProperty(AppProperties.INITIAL_B);
-        assertEquals(expInitialB, actInitialB);
+        assertEquals(INITIAL_B, actInitialB);
     }
 
     @Test
     public void getInitialLine() {
         //
-        String expInitialLine = "10";
-        when(mockAppProperties.getProperty(AppProperties.INITIAL_LINE)).thenReturn(expInitialLine);
+        String actInitialLine = model.getLine();
         //
-        String actInitialLine = model.getInitialLine();
-        //
-        verify(mockAppProperties).getProperty(AppProperties.INITIAL_LINE);
-        assertEquals(expInitialLine, actInitialLine);
+        assertEquals(INITIAL_LINE, actInitialLine);
     }
 }

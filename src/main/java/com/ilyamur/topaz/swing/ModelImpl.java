@@ -9,8 +9,22 @@ class ModelImpl implements Model {
     private final AppProperties appProperties;
     private Presenter presenter;
 
+    private String a;
+    private String b;
+    private String line;
+    private String sum;
+    private String product;
+    private String length;
+
     public ModelImpl(AppProperties appProperties) {
         this.appProperties = appProperties;
+        setInitialValues();
+    }
+
+    private void setInitialValues() {
+        a = appProperties.getProperty(AppProperties.INITIAL_A);
+        b = appProperties.getProperty(AppProperties.INITIAL_B);
+        line = appProperties.getProperty(AppProperties.INITIAL_LINE);
     }
 
     @Override
@@ -24,50 +38,80 @@ class ModelImpl implements Model {
     }
 
     @Override
-    public String getInitialA() {
-        return appProperties.getProperty(AppProperties.INITIAL_A);
+    public String getA() {
+        return a;
     }
 
     @Override
-    public String getInitialB() {
-        return appProperties.getProperty(AppProperties.INITIAL_B);
+    public void setA(String a) {
+        this.a = a;
     }
 
     @Override
-    public String getInitialLine() {
-        return appProperties.getProperty(AppProperties.INITIAL_LINE);
+    public String getB() {
+        return b;
     }
 
     @Override
-    public void computeSum(String a, String b) {
+    public void setB(String b) {
+        this.b = b;
+    }
+
+    @Override
+    public String getLine() {
+        return line;
+    }
+
+    @Override
+    public void setLine(String line) {
+        this.line = line;
+    }
+
+    @Override
+    public void computeSum() {
         try {
             BigInteger bintA = new BigInteger(a);
             BigInteger bintB = new BigInteger(b);
             BigInteger bintSum = bintA.add(bintB);
-            String sum = bintSum.toString();
-            presenter.updateComputeSumSuccess(sum);
+            sum = bintSum.toString();
+            presenter.updateComputeSumSuccess();
         } catch (NumberFormatException e) {
             presenter.updateComputeSumFailure();
         }
     }
 
     @Override
-    public void computeProduct(String a, String b) {
+    public String getSum() {
+        return sum;
+    }
+
+    @Override
+    public void computeProduct() {
         try {
             BigInteger bintA = new BigInteger(a);
             BigInteger bintB = new BigInteger(b);
             BigInteger bintProduct = bintA.multiply(bintB);
-            String strProduct = bintProduct.toString();
-            presenter.updateComputeProductSuccess(strProduct);
+            product = bintProduct.toString();
+            presenter.updateComputeProductSuccess();
         } catch (NumberFormatException e) {
             presenter.updateComputeProductFailure();
         }
     }
 
     @Override
-    public void computeLineLength(String line) {
+    public String getProduct() {
+        return product;
+    }
+
+    @Override
+    public void computeLength() {
         int intLength = line.length();
-        String length = String.valueOf(intLength);
-        presenter.updateComputeLineLength(length);
+        length = String.valueOf(intLength);
+        presenter.updateComputeLineLength();
+    }
+
+    @Override
+    public String getLength() {
+        return length;
     }
 }

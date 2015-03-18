@@ -15,9 +15,9 @@ class PresenterImpl implements Presenter {
     @Override
     public void eventInitialized() {
         //
-        String initialA = model.getInitialA();
-        String initialB = model.getInitialB();
-        String initialLine = model.getInitialLine();
+        String initialA = model.getA();
+        String initialB = model.getB();
+        String initialLine = model.getLine();
         //
         view.setA(initialA);
         view.setB(initialB);
@@ -37,19 +37,20 @@ class PresenterImpl implements Presenter {
 
     @Override
     public void eventChangedLine() {
-        String line = view.getLine();
-        model.computeLineLength(line) ;
+        model.setLine(view.getLine());
+        model.computeLength() ;
     }
 
     private void eventChangedNumber() {
-        String a = view.getA();
-        String b = view.getB();
-        model.computeSum(a, b);
-        model.computeProduct(a, b);
+        model.setA(view.getA());
+        model.setB(view.getB());
+        model.computeSum();
+        model.computeProduct();
     }
 
     @Override
-    public void updateComputeSumSuccess(String sum) {
+    public void updateComputeSumSuccess() {
+        String sum = model.getSum();
         view.setSum(sum);
     }
 
@@ -60,7 +61,8 @@ class PresenterImpl implements Presenter {
     }
 
     @Override
-    public void updateComputeProductSuccess(String product) {
+    public void updateComputeProductSuccess() {
+        String product = model.getProduct();
         view.setProduct(product);
     }
 
@@ -71,7 +73,8 @@ class PresenterImpl implements Presenter {
     }
 
     @Override
-    public void updateComputeLineLength(String length) {
+    public void updateComputeLineLength() {
+        String length = model.getLength();
         view.setLength(length);
     }
 }

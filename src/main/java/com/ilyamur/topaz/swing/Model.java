@@ -6,15 +6,27 @@ interface Model {
 
     String getFailureMessage();
 
-    void computeSum(String a, String b);
+    String getA();
 
-    void computeProduct(String a, String b);
+    void setA(String a);
 
-    void computeLineLength(String line);
+    String getB();
 
-    String getInitialA();
+    void setB(String b);
 
-    String getInitialB();
+    String getLine();
 
-    String getInitialLine();
+    void setLine(String line);
+
+    void computeSum();
+
+    String getSum();
+
+    void computeProduct();
+
+    String getProduct();
+
+    void computeLength();
+
+    String getLength();
 }

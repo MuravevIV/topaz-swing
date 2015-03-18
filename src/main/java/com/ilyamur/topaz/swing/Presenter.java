@@ -12,13 +12,13 @@ interface Presenter {
 
     //
 
-    void updateComputeSumSuccess(String sum);
+    void updateComputeSumSuccess();
 
     void updateComputeSumFailure();
 
-    void updateComputeProductSuccess(String product);
+    void updateComputeProductSuccess();
 
     void updateComputeProductFailure();
 
-    void updateComputeLineLength(String length);
+    void updateComputeLineLength();
 }

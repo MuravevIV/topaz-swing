@@ -2,6 +2,7 @@ package com.ilyamur.topaz.swing;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.mockito.Mockito.*;
 
 public class PresenterImplTest {
@@ -33,9 +34,9 @@ public class PresenterImplTest {
         String initialA = "10";
         String initialB = "20";
         String initialLine = "test";
-        when(mockModel.getInitialA()).thenReturn(initialA);
-        when(mockModel.getInitialB()).thenReturn(initialB);
-        when(mockModel.getInitialLine()).thenReturn(initialLine);
+        when(mockModel.getA()).thenReturn(initialA);
+        when(mockModel.getB()).thenReturn(initialB);
+        when(mockModel.getLine()).thenReturn(initialLine);
         when(mockView.getA()).thenReturn(initialA);
         when(mockView.getB()).thenReturn(initialB);
         when(mockView.getLine()).thenReturn(initialLine);
@@ -45,9 +46,9 @@ public class PresenterImplTest {
         verify(mockView).setA(initialA);
         verify(mockView).setB(initialB);
         verify(mockView).setLine(initialLine);
-        verify(mockModel).computeSum(initialA, initialB);
-        verify(mockModel).computeProduct(initialA, initialB);
-        verify(mockModel).computeLineLength(initialLine);
+        verify(mockModel).computeSum();
+        verify(mockModel).computeProduct();
+        verify(mockModel).computeLength();
     }
 
     @Test
@@ -60,8 +61,10 @@ public class PresenterImplTest {
         //
         presenter.eventChangedA();
         //
-        verify(mockModel).computeSum(strA, strB);
-        verify(mockModel).computeProduct(strA, strB);
+        verify(mockModel).setA(strA);
+        verify(mockModel).setB(strB);
+        verify(mockModel).computeSum();
+        verify(mockModel).computeProduct();
     }
 
     @Test
@@ -74,8 +77,10 @@ public class PresenterImplTest {
         //
         presenter.eventChangedB();
         //
-        verify(mockModel).computeSum(strA, strB);
-        verify(mockModel).computeProduct(strA, strB);
+        verify(mockModel).setA(strA);
+        verify(mockModel).setB(strB);
+        verify(mockModel).computeSum();
+        verify(mockModel).computeProduct();
     }
 
     @Test
@@ -86,7 +91,7 @@ public class PresenterImplTest {
         //
         presenter.eventChangedLine();
         //
-        verify(mockModel).computeLineLength(string);
+        verify(mockModel).computeLength();
     }
 
     //
@@ -95,8 +100,9 @@ public class PresenterImplTest {
     public void updateComputeSumSuccess() {
         //
         String strSum = "6";
+        when(mockModel.getSum()).thenReturn(strSum);
         //
-        presenter.updateComputeSumSuccess(strSum);
+        presenter.updateComputeSumSuccess();
         //
         verify(mockView).setSum(strSum);
     }
@@ -117,8 +123,9 @@ public class PresenterImplTest {
     public void updateComputeProductSuccess() {
         //
         String strProduct = "6";
+        when(mockModel.getProduct()).thenReturn(strProduct);
         //
-        presenter.updateComputeProductSuccess(strProduct);
+        presenter.updateComputeProductSuccess();
         //
         verify(mockView).setProduct(strProduct);
     }
@@ -139,8 +146,9 @@ public class PresenterImplTest {
     public void updateComputeLineLength() {
         //
         String strLength = "10";
+        when(mockModel.getLength()).thenReturn(strLength);
         //
-        presenter.updateComputeLineLength(strLength);
+        presenter.updateComputeLineLength();
         //
         verify(mockView).setLength(strLength);
     }
