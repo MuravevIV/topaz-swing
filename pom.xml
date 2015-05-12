@@ -59,6 +59,8 @@
                     <arguments>
                         <argument>-classpath</argument>
                         <classpath />
+                        <argument>-Xdebug</argument>
+                        <argument>-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005</argument>
                         <argument>${mainClass}</argument>
                     </arguments>
                     <workingDirectory>${workingDirectory}</workingDirectory>
