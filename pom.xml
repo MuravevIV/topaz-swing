@@ -17,7 +17,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <workingDirectory>${project.basedir}/src/main/working</workingDirectory>
-        <assemblyDirectory>${project.build.directory}/assembly/${project.name}</assemblyDirectory>
+        <confAssemblyJarDirectory>${project.basedir}/src/main/conf/assembly/jar</confAssemblyJarDirectory>
+        <assemblyJarDirectory>${project.build.directory}/assembly-jar/${project.name}</assemblyJarDirectory>
+        <assemblyNativeDirectory>${project.build.directory}/assembly-native/${project.name}</assemblyNativeDirectory>
         <mainClass>com.ilyamur.topaz.swing.SwingView</mainClass>
         <exe.name>${project.name}.exe</exe.name>
         <jre.minVersion>1.8.0</jre.minVersion>
@@ -27,6 +29,7 @@
 
         <plugins>
 
+            <!-- Intellij Swing Forms Editor Support -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>ideauidesigner-maven-plugin</artifactId>
@@ -46,6 +49,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Debug Execution -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -71,6 +75,64 @@
             </plugin>
 
             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+
+                    <!-- Assembly Jar -->
+                    <execution>
+                        <id>copy-conf-assembly-jar</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${assemblyJarDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${confAssemblyJarDirectory}</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-resources-assembly-jar</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${assemblyJarDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${workingDirectory}</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+
+                    <!-- Assembly Native -->
+                    <execution>
+                        <id>copy-resources-assembly-native</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${assemblyNativeDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${workingDirectory}</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+            <!-- Assembly Jar -->
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.5.1</version>
                 <executions>
@@ -91,34 +153,13 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                    <outputDirectory>${assemblyDirectory}</outputDirectory>
+                    <outputDirectory>${assemblyJarDirectory}</outputDirectory>
                     <finalName>${project.name}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
             </plugin>
 
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources-assembly</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${assemblyDirectory}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${workingDirectory}</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
+            <!-- Assembly Native -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -142,7 +183,6 @@
                     </transformers>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
@@ -157,7 +197,7 @@
                         <configuration>
                             <headerType>gui</headerType>
                             <jar>${project.build.directory}/${project.artifactId}-${project.version}-shaded.jar</jar>
-                            <outfile>${assemblyDirectory}/${exe.name}</outfile>
+                            <outfile>${assemblyNativeDirectory}/${exe.name}</outfile>
                             <downloadUrl>http://java.com/download</downloadUrl>
                             <classPath>
                                 <mainClass>${mainClass}</mainClass>
@@ -195,7 +235,7 @@
 
     <dependencies>
 
-        <!-- Intellij Swing Forms Editor -->
+        <!-- Intellij Swing Forms -->
         <dependency>
             <groupId>com.intellij</groupId>
             <artifactId>forms_rt</artifactId>
