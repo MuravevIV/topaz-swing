@@ -89,13 +89,16 @@ public class SwingView implements View {
         PresenterImpl presenter = new PresenterImpl(model, view);
         //
         JFrame frame = new JFrame("topaz-swing");
+
         frame.setContentPane(view.panMain);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        //
+
+        frame.setIconImage(new ImageIcon(SwingView.class.getResource("/icon.ico")).getImage());
+
         presenter.eventInitialized();
     }
 }
